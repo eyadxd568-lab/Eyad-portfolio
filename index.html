@@ -1,597 +1,709 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إياد عوض | مطور ومصمم مواقع</title>
+<!-- Fonts: loads from Google if online, falls back to system Arabic fonts offline -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
+  /* Offline fallback: if Google Fonts fail, use system Arabic fonts */
+  @font-face {
+    font-family: 'Cairo';
+    src: local('Cairo'), local('Arial'), local('Segoe UI');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Tajawal';
+    src: local('Tajawal'), local('Arial'), local('Segoe UI');
+    font-weight: 100 900;
+    font-display: swap;
+  }
+</style>
+<style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-dim: #7a6330;
-    --bg-deep: #0a0a0a;
-    --bg-dark: #111111;
-    --bg-card: #181818;
-    --bg-card2: #1e1e1e;
-    --text-primary: #f0ece0;
-    --text-muted: #9a9080;
-    --text-dim: #5a5550;
-    --border: rgba(201,168,76,0.15);
-    --border-strong: rgba(201,168,76,0.35);
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
-    background: var(--bg-deep);
-    color: var(--text-primary);
-    line-height: 1.8;
-    overflow-x: hidden;
-  }
-
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg-deep); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; right: 0; left: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.2rem 5%;
-    background: rgba(10,10,10,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 0.5px solid var(--border);
-  }
-
-  .nav-logo {
-    font-size: 1.3rem; font-weight: 700; color: var(--gold);
-    letter-spacing: 1px; text-decoration: none;
-  }
-
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: var(--text-muted); text-decoration: none;
-    font-size: 0.9rem; font-weight: 500; transition: color 0.3s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center;
-    padding: 7rem 5% 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
-  }
-
-  .hero-grid {
-    position: absolute; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 80%);
-  }
-
-  .hero-content { position: relative; z-index: 1; max-width: 800px; }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(201,168,76,0.08); border: 0.5px solid var(--border-strong);
-    color: var(--gold); font-size: 0.8rem; padding: 6px 18px;
-    border-radius: 100px; margin-bottom: 2rem;
-    letter-spacing: 0.5px;
-  }
-
-  .hero-badge::before {
-    content: ''; width: 6px; height: 6px; border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 6px var(--gold);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .hero-name {
-    font-size: clamp(3rem, 8vw, 5.5rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, #f0ece0 30%, var(--gold) 60%, #f0ece0 80%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% auto;
-    animation: shimmer 4s linear infinite;
-  }
-
-  @keyframes shimmer {
-    to { background-position: 200% center; }
-  }
-
-  .hero-title {
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.5px;
-  }
-
-  .hero-desc {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 1.05rem;
-    color: var(--text-muted);
-    max-width: 580px;
-    margin: 0 auto 2.5rem;
-    line-height: 2;
-  }
-
-  .hero-cta {
-    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    background: var(--gold); color: #0a0a0a;
-    padding: 0.9rem 2.2rem; border-radius: 8px;
-    font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: 700;
-    text-decoration: none; transition: all 0.3s;
-    border: none; cursor: pointer;
-  }
-  .btn-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(201,168,76,0.25);
-  }
-
-  .btn-outline {
-    background: transparent; color: var(--text-primary);
-    padding: 0.9rem 2.2rem; border-radius: 8px;
-    font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: 600;
-    text-decoration: none; transition: all 0.3s;
-    border: 1px solid var(--border-strong);
-  }
-  .btn-outline:hover {
-    border-color: var(--gold); color: var(--gold);
-    transform: translateY(-2px);
-  }
-
-  .hero-scroll {
-    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-    z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
-  }
-  .hero-scroll span {
-    font-size: 0.7rem; color: var(--text-dim); letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  .scroll-line {
-    width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollDown 2s ease-in-out infinite;
-  }
-  @keyframes scrollDown {
-    0% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform: scaleY(1); transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
-  }
-
-  /* ── SECTIONS ── */
-  section { padding: 7rem 5%; }
-
-  .section-label {
-    display: inline-block;
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 3px;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    font-weight: 900;
-    line-height: 1.2;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-  }
-
-  .title-line {
-    width: 50px; height: 3px;
-    background: linear-gradient(to left, var(--gold), transparent);
-    border-radius: 2px; margin-bottom: 2rem;
-  }
-
-  .container { max-width: 1100px; margin: 0 auto; }
-
-  /* ── ABOUT ── */
-  #about { background: var(--bg-dark); }
-
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center;
-  }
-
-  .about-visual {
-    position: relative;
-  }
-
-  .about-card-main {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .about-card-main::before {
-    content: '';
-    position: absolute; top: 0; right: 0;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-  }
-
-  .about-initials {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem; font-weight: 900; color: #0a0a0a;
-    margin-bottom: 1.5rem;
-  }
-
-  .about-card-name {
-    font-size: 1.4rem; font-weight: 700; color: var(--text-primary);
-    margin-bottom: 0.3rem;
-  }
-
-  .about-card-role {
-    font-size: 0.85rem; color: var(--gold); font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-
-  .about-stats {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .stat-item {
-    background: var(--bg-card2);
-    border: 0.5px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem;
-  }
-
-  .stat-num {
-    font-size: 1.8rem; font-weight: 900; color: var(--gold);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;
-    font-family: 'Tajawal', sans-serif;
-  }
-
-  .about-float {
-    position: absolute; bottom: -20px; left: -20px;
-    background: var(--bg-card2);
-    border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    padding: 0.8rem 1.2rem;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 0.8rem; color: var(--text-primary);
-  }
-
-  .dot-green {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #4caf50;
-    box-shadow: 0 0 6px rgba(76,175,80,0.6);
-  }
-
-  .about-text p {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 1.05rem; color: var(--text-muted);
-    line-height: 2; margin-bottom: 1.2rem;
-  }
-
-  /* ── SERVICES ── */
-  #services { background: var(--bg-deep); }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-
-  .service-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 2rem;
-    transition: all 0.4s;
-    position: relative;
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .service-card::after {
-    content: '';
-    position: absolute; bottom: 0; right: 0; left: 0;
-    height: 2px;
-    background: linear-gradient(to left, var(--gold), transparent);
-    transform: scaleX(0); transform-origin: right;
-    transition: transform 0.4s;
-  }
-
-  .service-card:hover {
-    border-color: var(--border-strong);
-    transform: translateY(-5px);
-    background: var(--bg-card2);
-  }
-
-  .service-card:hover::after {
-    transform: scaleX(1);
-  }
-
-  .service-icon {
-    width: 50px; height: 50px;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .service-card h3 {
-    font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
-    margin-bottom: 0.7rem;
-  }
-
-  .service-card p {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 0.9rem; color: var(--text-muted); line-height: 1.9;
-  }
-
-  /* ── PROJECTS ── */
-  #projects { background: var(--bg-dark); }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-
-  .project-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s;
-  }
-
-  .project-card:hover {
-    border-color: var(--border-strong);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  }
-
-  .project-preview {
-    height: 220px;
-    background: var(--bg-card2);
-    position: relative;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .project-preview iframe {
-    width: 140%; height: 140%;
-    border: none;
-    transform: scale(0.714);
-    transform-origin: center center;
-    pointer-events: none;
-  }
-
-  .project-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(10,10,10,0.8) 100%);
-  }
-
-  .project-type {
-    position: absolute; top: 16px; right: 16px;
-    background: rgba(201,168,76,0.15);
-    border: 0.5px solid var(--border-strong);
-    color: var(--gold); font-size: 0.7rem; font-weight: 600;
-    padding: 4px 12px; border-radius: 100px; letter-spacing: 0.5px;
-  }
-
-  .project-info { padding: 1.5rem; }
-
-  .project-info h3 {
-    font-size: 1.15rem; font-weight: 700; color: var(--text-primary);
-    margin-bottom: 0.5rem;
-  }
-
-  .project-info p {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;
-    margin-bottom: 1.2rem;
-  }
-
-  .project-tags {
-    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.2rem;
-  }
-
-  .tag {
-    background: rgba(201,168,76,0.06);
-    border: 0.5px solid var(--border);
-    color: var(--text-muted);
-    font-size: 0.72rem; padding: 3px 10px; border-radius: 100px;
-    font-family: 'Tajawal', sans-serif;
-  }
-
-  .project-link {
-    display: inline-flex; align-items: center; gap: 6px;
-    color: var(--gold); font-size: 0.85rem; font-weight: 600;
-    text-decoration: none; transition: all 0.3s;
-    border: 0.5px solid var(--border-strong);
-    padding: 8px 18px; border-radius: 8px;
-  }
-
-  .project-link:hover {
-    background: rgba(201,168,76,0.08);
-    gap: 10px;
-  }
-
-  .arrow-icon { font-size: 0.75rem; }
-
-  /* ── CONTACT ── */
-  #contact {
-    background: var(--bg-deep);
-    text-align: center;
-  }
-
-  .contact-inner {
-    max-width: 600px; margin: 0 auto;
-  }
-
-  .contact-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 3rem;
-    margin-top: 3rem;
-    position: relative; overflow: hidden;
-  }
-
-  .contact-card::before {
-    content: '';
-    position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
-  }
-
-  .contact-card p {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 1rem; color: var(--text-muted);
-    line-height: 2; margin-bottom: 2rem; position: relative;
-  }
-
-  .contact-phone {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: rgba(201,168,76,0.08);
-    border: 1px solid var(--border-strong);
-    border-radius: 12px;
-    padding: 1rem 2rem;
-    color: var(--text-primary); font-size: 1.2rem; font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s;
-    position: relative;
-  }
-
-  .contact-phone:hover {
-    background: rgba(201,168,76,0.14);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(201,168,76,0.1);
-    color: var(--gold);
-  }
-
-  .phone-icon { font-size: 1.3rem; }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--bg-dark);
-    border-top: 0.5px solid var(--border);
-    text-align: center;
-    padding: 2rem 5%;
-  }
-
-  footer p {
-    font-family: 'Tajawal', sans-serif;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-  }
-
-  footer span { color: var(--gold); }
-
-  /* ── DIVIDER ── */
-  .gold-divider {
-    width: 100%; height: 1px;
-    background: linear-gradient(to left, transparent, var(--gold-dim), transparent);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .nav-mobile-btn { display: flex; }
-  }
-
-  .nav-mobile-btn {
-    display: none;
-    flex-direction: column; gap: 5px;
-    background: none; border: none; cursor: pointer; padding: 4px;
-  }
-  .nav-mobile-btn span {
-    display: block; width: 24px; height: 2px;
-    background: var(--gold); border-radius: 2px;
-    transition: all 0.3s;
-  }
-
-  .mobile-menu {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10,10,10,0.97);
-    z-index: 200;
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 2.5rem;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a {
-    color: var(--text-primary); text-decoration: none;
-    font-size: 1.6rem; font-weight: 700;
-    transition: color 0.3s;
-  }
-  .mobile-menu a:hover { color: var(--gold); }
-  .mobile-menu-close {
-    position: absolute; top: 1.5rem; left: 1.5rem;
-    background: none; border: none; color: var(--gold);
-    font-size: 1.8rem; cursor: pointer;
-  }
-
-  @media (max-width: 600px) {
-    section { padding: 5rem 5%; }
-    .hero-cta { flex-direction: column; align-items: center; }
-  }
-
-  /* ── FADE IN ANIMATIONS ── */
-  .fade-up {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
+:root {
+–gold: #c9a84c;
+–gold-light: #e8c97a;
+–gold-dim: #7a6330;
+–bg-deep: #0a0a0a;
+–bg-dark: #111111;
+–bg-card: #181818;
+–bg-card2: #1e1e1e;
+–text-primary: #f0ece0;
+–text-muted: #9a9080;
+–text-dim: #5a5550;
+–border: rgba(201,168,76,0.15);
+–border-strong: rgba(201,168,76,0.35);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+font-family: ‘Cairo’, ‘Segoe UI’, Arial, sans-serif;
+background: var(–bg-deep);
+color: var(–text-primary);
+line-height: 1.8;
+overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(–bg-deep); }
+::-webkit-scrollbar-thumb { background: var(–gold-dim); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+position: fixed; top: 0; right: 0; left: 0; z-index: 100;
+display: flex; justify-content: space-between; align-items: center;
+padding: 1.2rem 5%;
+background: rgba(10,10,10,0.85);
+backdrop-filter: blur(12px);
+border-bottom: 0.5px solid var(–border);
+}
+
+.nav-logo {
+font-size: 1.3rem; font-weight: 700; color: var(–gold);
+letter-spacing: 1px; text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+color: var(–text-muted); text-decoration: none;
+font-size: 0.9rem; font-weight: 500; transition: color 0.3s;
+}
+.nav-links a:hover { color: var(–gold); }
+
+/* ── HERO ── */
+#hero {
+min-height: 100vh;
+display: flex; flex-direction: column;
+justify-content: center; align-items: center;
+text-align: center;
+padding: 7rem 5% 4rem;
+position: relative;
+overflow: hidden;
+}
+
+.hero-bg {
+position: absolute; inset: 0; z-index: 0;
+background:
+radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%),
+radial-gradient(ellipse 40% 30% at 80% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+}
+
+.hero-grid {
+position: absolute; inset: 0; z-index: 0;
+background-image:
+linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+background-size: 60px 60px;
+mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 20%, transparent 80%);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+.hero-badge {
+display: inline-flex; align-items: center; gap: 8px;
+background: rgba(201,168,76,0.08); border: 0.5px solid var(–border-strong);
+color: var(–gold); font-size: 0.8rem; padding: 6px 18px;
+border-radius: 100px; margin-bottom: 2rem;
+letter-spacing: 0.5px;
+}
+
+.hero-badge::before {
+content: ‘’; width: 6px; height: 6px; border-radius: 50%;
+background: var(–gold);
+box-shadow: 0 0 6px var(–gold);
+animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.3; }
+}
+
+.hero-name {
+font-size: clamp(3rem, 8vw, 5.5rem);
+font-weight: 900;
+line-height: 1.1;
+margin-bottom: 0.5rem;
+background: linear-gradient(135deg, #f0ece0 30%, var(–gold) 60%, #f0ece0 80%);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+background-clip: text;
+background-size: 200% auto;
+animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+to { background-position: 200% center; }
+}
+
+.hero-title {
+font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+color: var(–gold);
+font-weight: 500;
+margin-bottom: 1.5rem;
+letter-spacing: 0.5px;
+}
+
+.hero-desc {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 1.05rem;
+color: var(–text-muted);
+max-width: 580px;
+margin: 0 auto 2.5rem;
+line-height: 2;
+}
+
+.hero-cta {
+display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+}
+
+.btn-primary {
+background: var(–gold); color: #0a0a0a;
+padding: 0.9rem 2.2rem; border-radius: 8px;
+font-family: ‘Cairo’, sans-serif; font-size: 0.95rem; font-weight: 700;
+text-decoration: none; transition: all 0.3s;
+border: none; cursor: pointer;
+}
+.btn-primary:hover {
+background: var(–gold-light);
+transform: translateY(-2px);
+box-shadow: 0 8px 24px rgba(201,168,76,0.25);
+}
+
+.btn-outline {
+background: transparent; color: var(–text-primary);
+padding: 0.9rem 2.2rem; border-radius: 8px;
+font-family: ‘Cairo’, sans-serif; font-size: 0.95rem; font-weight: 600;
+text-decoration: none; transition: all 0.3s;
+border: 1px solid var(–border-strong);
+}
+.btn-outline:hover {
+border-color: var(–gold); color: var(–gold);
+transform: translateY(-2px);
+}
+
+.hero-scroll {
+position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.hero-scroll span {
+font-size: 0.7rem; color: var(–text-dim); letter-spacing: 2px;
+text-transform: uppercase;
+}
+.scroll-line {
+width: 1px; height: 40px; background: linear-gradient(to bottom, var(–gold), transparent);
+animation: scrollDown 2s ease-in-out infinite;
+}
+@keyframes scrollDown {
+0% { transform: scaleY(0); transform-origin: top; }
+50% { transform: scaleY(1); transform-origin: top; }
+51% { transform: scaleY(1); transform-origin: bottom; }
+100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ── SECTIONS ── */
+section { padding: 7rem 5%; }
+
+.section-label {
+display: inline-block;
+font-size: 0.75rem; font-weight: 600; letter-spacing: 3px;
+color: var(–gold); text-transform: uppercase;
+margin-bottom: 1rem;
+}
+
+.section-title {
+font-size: clamp(2rem, 4vw, 2.8rem);
+font-weight: 900;
+line-height: 1.2;
+color: var(–text-primary);
+margin-bottom: 1rem;
+}
+
+.title-line {
+width: 50px; height: 3px;
+background: linear-gradient(to left, var(–gold), transparent);
+border-radius: 2px; margin-bottom: 2rem;
+}
+
+.container { max-width: 1100px; margin: 0 auto; }
+
+/* ── ABOUT ── */
+#about { background: var(–bg-dark); }
+
+.about-grid {
+display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center;
+}
+
+.about-visual {
+position: relative;
+}
+
+.about-card-main {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 2.5rem;
+position: relative;
+overflow: hidden;
+}
+
+.about-card-main::before {
+content: ‘’;
+position: absolute; top: 0; right: 0;
+width: 120px; height: 120px;
+background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+}
+
+.about-initials {
+width: 80px; height: 80px;
+background: linear-gradient(135deg, var(–gold-dim), var(–gold));
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.8rem; font-weight: 900; color: #0a0a0a;
+margin-bottom: 1.5rem;
+}
+
+.about-card-name {
+font-size: 1.4rem; font-weight: 700; color: var(–text-primary);
+margin-bottom: 0.3rem;
+}
+
+.about-card-role {
+font-size: 0.85rem; color: var(–gold); font-weight: 500;
+margin-bottom: 1.5rem;
+}
+
+.about-stats {
+display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+margin-top: 1.5rem;
+}
+
+.stat-item {
+background: var(–bg-card2);
+border: 0.5px solid var(–border);
+border-radius: 10px;
+padding: 1rem;
+}
+
+.stat-num {
+font-size: 1.8rem; font-weight: 900; color: var(–gold);
+line-height: 1;
+}
+
+.stat-label {
+font-size: 0.75rem; color: var(–text-muted); margin-top: 4px;
+font-family: ‘Tajawal’, sans-serif;
+}
+
+.about-float {
+position: absolute; bottom: -20px; left: -20px;
+background: var(–bg-card2);
+border: 1px solid var(–border-strong);
+border-radius: 12px;
+padding: 0.8rem 1.2rem;
+display: flex; align-items: center; gap: 10px;
+font-size: 0.8rem; color: var(–text-primary);
+}
+
+.dot-green {
+width: 8px; height: 8px; border-radius: 50%;
+background: #4caf50;
+box-shadow: 0 0 6px rgba(76,175,80,0.6);
+}
+
+.about-text p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 1.05rem; color: var(–text-muted);
+line-height: 2; margin-bottom: 1.2rem;
+}
+
+/* ── SERVICES ── */
+#services { background: var(–bg-deep); }
+
+.services-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 1.5rem;
+margin-top: 3rem;
+}
+
+.service-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 2rem;
+transition: all 0.4s;
+position: relative;
+overflow: hidden;
+cursor: default;
+}
+
+.service-card::after {
+content: ‘’;
+position: absolute; bottom: 0; right: 0; left: 0;
+height: 2px;
+background: linear-gradient(to left, var(–gold), transparent);
+transform: scaleX(0); transform-origin: right;
+transition: transform 0.4s;
+}
+
+.service-card:hover {
+border-color: var(–border-strong);
+transform: translateY(-5px);
+background: var(–bg-card2);
+}
+
+.service-card:hover::after {
+transform: scaleX(1);
+}
+
+.service-icon {
+width: 50px; height: 50px;
+background: rgba(201,168,76,0.1);
+border: 1px solid var(–border-strong);
+border-radius: 12px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.3rem;
+margin-bottom: 1.2rem;
+}
+
+.service-card h3 {
+font-size: 1.1rem; font-weight: 700; color: var(–text-primary);
+margin-bottom: 0.7rem;
+}
+
+.service-card p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 0.9rem; color: var(–text-muted); line-height: 1.9;
+}
+
+/* ── PROJECTS ── */
+#projects { background: var(–bg-dark); }
+
+.projects-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr));
+gap: 2rem;
+margin-top: 3rem;
+}
+
+.project-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 16px;
+overflow: hidden;
+transition: all 0.4s;
+}
+
+.project-card:hover {
+border-color: var(–border-strong);
+transform: translateY(-6px);
+box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.project-preview {
+height: 220px;
+background: var(–bg-card2);
+position: relative;
+overflow: hidden;
+display: flex; align-items: center; justify-content: center;
+}
+
+.project-preview iframe {
+width: 140%; height: 140%;
+border: none;
+transform: scale(0.714);
+transform-origin: center center;
+pointer-events: none;
+}
+
+.project-overlay {
+position: absolute; inset: 0;
+background: linear-gradient(to bottom, transparent 50%, rgba(10,10,10,0.8) 100%);
+}
+
+.project-type {
+position: absolute; top: 16px; right: 16px;
+background: rgba(201,168,76,0.15);
+border: 0.5px solid var(–border-strong);
+color: var(–gold); font-size: 0.7rem; font-weight: 600;
+padding: 4px 12px; border-radius: 100px; letter-spacing: 0.5px;
+}
+
+.project-info { padding: 1.5rem; }
+
+.project-info h3 {
+font-size: 1.15rem; font-weight: 700; color: var(–text-primary);
+margin-bottom: 0.5rem;
+}
+
+.project-info p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 0.88rem; color: var(–text-muted); line-height: 1.8;
+margin-bottom: 1.2rem;
+}
+
+.project-tags {
+display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.2rem;
+}
+
+.tag {
+background: rgba(201,168,76,0.06);
+border: 0.5px solid var(–border);
+color: var(–text-muted);
+font-size: 0.72rem; padding: 3px 10px; border-radius: 100px;
+font-family: ‘Tajawal’, sans-serif;
+}
+
+.project-link {
+display: inline-flex; align-items: center; gap: 6px;
+color: var(–gold); font-size: 0.85rem; font-weight: 600;
+text-decoration: none; transition: all 0.3s;
+border: 0.5px solid var(–border-strong);
+padding: 8px 18px; border-radius: 8px;
+}
+
+.project-link:hover {
+background: rgba(201,168,76,0.08);
+gap: 10px;
+}
+
+.arrow-icon { font-size: 0.75rem; }
+
+/* ── CONTACT ── */
+#contact {
+background: var(–bg-deep);
+text-align: center;
+}
+
+.contact-inner {
+max-width: 600px; margin: 0 auto;
+}
+
+.contact-card {
+background: var(–bg-card);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 3rem;
+margin-top: 3rem;
+position: relative; overflow: hidden;
+}
+
+.contact-card::before {
+content: ‘’;
+position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+width: 200px; height: 200px;
+background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
+}
+
+.contact-card p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 1rem; color: var(–text-muted);
+line-height: 2; margin-bottom: 2rem; position: relative;
+}
+
+.contact-phone {
+display: inline-flex; align-items: center; gap: 12px;
+background: rgba(201,168,76,0.08);
+border: 1px solid var(–border-strong);
+border-radius: 12px;
+padding: 1rem 2rem;
+color: var(–text-primary); font-size: 1.2rem; font-weight: 700;
+text-decoration: none;
+transition: all 0.3s;
+position: relative;
+}
+
+.contact-phone:hover {
+background: rgba(201,168,76,0.14);
+transform: translateY(-3px);
+box-shadow: 0 12px 30px rgba(201,168,76,0.1);
+color: var(–gold);
+}
+
+.phone-icon { font-size: 1.3rem; }
+
+.contact-links {
+display: flex; flex-direction: column; align-items: center; gap: 1rem;
+position: relative;
+}
+
+.contact-email {
+display: inline-flex; align-items: center; gap: 12px;
+background: rgba(201,168,76,0.05);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 0.85rem 2rem;
+color: var(–text-muted); font-size: 1rem; font-weight: 500;
+text-decoration: none;
+transition: all 0.3s;
+width: 100%;
+justify-content: center;
+}
+
+.contact-email:hover {
+background: rgba(201,168,76,0.1);
+border-color: var(–border-strong);
+color: var(–gold);
+transform: translateY(-2px);
+}
+
+/* WhatsApp floating button */
+.whatsapp-float {
+position: fixed; bottom: 2rem; left: 2rem; z-index: 999;
+}
+
+.whatsapp-btn {
+display: flex; align-items: center; gap: 10px;
+background: #25D366; color: #fff;
+border: none; border-radius: 50px;
+padding: 0.9rem 1.5rem;
+font-family: ‘Cairo’, sans-serif; font-size: 0.95rem; font-weight: 700;
+cursor: pointer; text-decoration: none;
+box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+transition: all 0.3s;
+animation: waBounce 2s ease-in-out infinite;
+}
+
+.whatsapp-btn:hover {
+background: #1ebe5d;
+transform: scale(1.05);
+box-shadow: 0 6px 28px rgba(37,211,102,0.5);
+animation: none;
+}
+
+.whatsapp-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+@keyframes waBounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-6px); }
+}
+
+.wa-popup {
+position: absolute; bottom: 70px; left: 0;
+background: var(–bg-card2);
+border: 1px solid var(–border-strong);
+border-radius: 16px;
+padding: 1.2rem 1.5rem;
+width: 230px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+display: none;
+flex-direction: column; gap: 0.6rem;
+text-align: right;
+}
+
+.wa-popup.open { display: flex; }
+
+.wa-popup p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 0.9rem; color: var(–text-muted);
+margin: 0; line-height: 1.6;
+}
+
+.wa-popup a {
+display: block; background: #25D366; color: #fff;
+text-align: center; border-radius: 10px;
+padding: 0.6rem; font-weight: 700; font-size: 0.9rem;
+text-decoration: none; margin-top: 0.3rem;
+transition: background 0.2s;
+}
+
+.wa-popup a:hover { background: #1ebe5d; }
+
+.wa-close {
+position: absolute; top: 8px; left: 10px;
+background: none; border: none; color: var(–text-dim);
+font-size: 1rem; cursor: pointer; line-height: 1;
+}
+
+/* ── FOOTER ── */
+footer {
+background: var(–bg-dark);
+border-top: 0.5px solid var(–border);
+text-align: center;
+padding: 2rem 5%;
+}
+
+footer p {
+font-family: ‘Tajawal’, sans-serif;
+font-size: 0.85rem;
+color: var(–text-dim);
+}
+
+footer span { color: var(–gold); }
+
+/* ── DIVIDER ── */
+.gold-divider {
+width: 100%; height: 1px;
+background: linear-gradient(to left, transparent, var(–gold-dim), transparent);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+.about-grid { grid-template-columns: 1fr; gap: 3rem; }
+.projects-grid { grid-template-columns: 1fr; }
+.nav-links { display: none; }
+.nav-mobile-btn { display: flex; }
+}
+
+.nav-mobile-btn {
+display: none;
+flex-direction: column; gap: 5px;
+background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-mobile-btn span {
+display: block; width: 24px; height: 2px;
+background: var(–gold); border-radius: 2px;
+transition: all 0.3s;
+}
+
+.mobile-menu {
+display: none;
+position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(10,10,10,0.97);
+z-index: 200;
+flex-direction: column; align-items: center; justify-content: center;
+gap: 2.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+color: var(–text-primary); text-decoration: none;
+font-size: 1.6rem; font-weight: 700;
+transition: color 0.3s;
+}
+.mobile-menu a:hover { color: var(–gold); }
+.mobile-menu-close {
+position: absolute; top: 1.5rem; left: 1.5rem;
+background: none; border: none; color: var(–gold);
+font-size: 1.8rem; cursor: pointer;
+}
+
+@media (max-width: 600px) {
+section { padding: 5rem 5%; }
+.hero-cta { flex-direction: column; align-items: center; }
+}
+
+/* ── FADE IN ANIMATIONS ── */
+.fade-up {
+opacity: 0; transform: translateY(30px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
 </style>
+
 </head>
 <body>
 
 <!-- NAV -->
+
 <nav>
   <a href="#hero" class="nav-logo">إياد عوض</a>
   <ul class="nav-links">
@@ -606,6 +718,7 @@
 </nav>
 
 <!-- Mobile Menu -->
+
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-menu-close" onclick="document.getElementById('mobileMenu').classList.remove('open')">✕</button>
   <a href="#about" onclick="document.getElementById('mobileMenu').classList.remove('open')">عني</a>
@@ -615,6 +728,7 @@
 </div>
 
 <!-- HERO -->
+
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
@@ -637,6 +751,7 @@
 <div class="gold-divider"></div>
 
 <!-- ABOUT -->
+
 <section id="about">
   <div class="container">
     <div class="about-grid">
@@ -670,21 +785,25 @@
         </div>
       </div>
 
-      <div class="about-text fade-up" style="transition-delay: 0.2s">
-        <div class="section-label">عن المطوّر</div>
-        <h2 class="section-title">من أنا؟</h2>
-        <div class="title-line"></div>
-        <p>أنا <strong style="color: var(--text-primary);">إياد عوض</strong>، مطوّر ومصمّم مواقع إلكترونية متخصص في تحويل الرؤى التجارية إلى تجارب رقمية متكاملة واحترافية.</p>
-        <p>أؤمن بأن الموقع الإلكتروني هو واجهة علامتك التجارية للعالم، لذلك أعمل بدقة واهتمام في كل تفصيلة — من التصميم البصري إلى الأداء التقني والأمان.</p>
-        <p>أنفّذ المشروع كاملاً من الصفر وحتى الإطلاق، بأسلوب احترافي يناسب احتياجك بالضبط.</p>
-      </div>
-    </div>
+```
+  <div class="about-text fade-up" style="transition-delay: 0.2s">
+    <div class="section-label">عن المطوّر</div>
+    <h2 class="section-title">من أنا؟</h2>
+    <div class="title-line"></div>
+    <p>أنا <strong style="color: var(--text-primary);">إياد عوض</strong>، مطوّر ومصمّم مواقع إلكترونية متخصص في تحويل الرؤى التجارية إلى تجارب رقمية متكاملة واحترافية.</p>
+    <p>أؤمن بأن الموقع الإلكتروني هو واجهة علامتك التجارية للعالم، لذلك أعمل بدقة واهتمام في كل تفصيلة — من التصميم البصري إلى الأداء التقني والأمان.</p>
+    <p>أنفّذ المشروع كاملاً من الصفر وحتى الإطلاق، بأسلوب احترافي يناسب احتياجك بالضبط.</p>
+  </div>
+</div>
+```
+
   </div>
 </section>
 
 <div class="gold-divider"></div>
 
 <!-- SERVICES -->
+
 <section id="services">
   <div class="container">
     <div style="text-align: center;">
@@ -730,6 +849,7 @@
 <div class="gold-divider"></div>
 
 <!-- PROJECTS -->
+
 <section id="projects">
   <div class="container">
     <div style="text-align: center;">
@@ -739,97 +859,101 @@
     </div>
     <div class="projects-grid">
 
-      <!-- Project 1 -->
-      <div class="project-card fade-up">
-        <div class="project-preview">
-          <iframe src="https://www.beautifuloasistrading.com" loading="lazy" title="Beautiful Oasis Trading" scrolling="no"></iframe>
-          <div class="project-overlay"></div>
-          <div class="project-type">موقع شركة</div>
-        </div>
-        <div class="project-info">
-          <h3>Beautiful Oasis Trading</h3>
-          <p>موقع متكامل لشركة تجارية احترافي يعرض المنتجات والخدمات بأسلوب أنيق يبني الثقة مع العملاء.</p>
-          <div class="project-tags">
-            <span class="tag">تصميم احترافي</span>
-            <span class="tag">متجاوب</span>
-            <span class="tag">شركات</span>
-          </div>
-          <a href="https://www.beautifuloasistrading.com" target="_blank" class="project-link">
-            زيارة الموقع <span class="arrow-icon">←</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Project 2 -->
-      <div class="project-card fade-up" style="transition-delay:0.1s">
-        <div class="project-preview">
-          <iframe src="https://hawk-gyms.vercel.app" loading="lazy" title="Hawk Gyms" scrolling="no"></iframe>
-          <div class="project-overlay"></div>
-          <div class="project-type">موقع رياضي</div>
-        </div>
-        <div class="project-info">
-          <h3>Hawk Gyms</h3>
-          <p>موقع لنادي رياضي بتصميم قوي وديناميكي يعكس روح اللياقة، مع عروض الاشتراكات وجداول التدريب.</p>
-          <div class="project-tags">
-            <span class="tag">تصميم ديناميكي</span>
-            <span class="tag">Vercel</span>
-            <span class="tag">رياضة</span>
-          </div>
-          <a href="https://hawk-gyms.vercel.app" target="_blank" class="project-link">
-            زيارة الموقع <span class="arrow-icon">←</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Project 3 -->
-      <div class="project-card fade-up" style="transition-delay:0.2s">
-        <div class="project-preview">
-          <iframe src="https://www.realstonemarble.com" loading="lazy" title="Real Stone Marble" scrolling="no"></iframe>
-          <div class="project-overlay"></div>
-          <div class="project-type">موقع تجاري</div>
-        </div>
-        <div class="project-info">
-          <h3>Real Stone Marble</h3>
-          <p>موقع فاخر لشركة رخام وأحجار طبيعية يبرز جمال المنتجات بصرياً ويجذب عملاء المقاولات والتصميم الداخلي.</p>
-          <div class="project-tags">
-            <span class="tag">تصميم فاخر</span>
-            <span class="tag">معرض منتجات</span>
-            <span class="tag">أعمال</span>
-          </div>
-          <a href="https://www.realstonemarble.com" target="_blank" class="project-link">
-            زيارة الموقع <span class="arrow-icon">←</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Project 4 -->
-      <div class="project-card fade-up" style="transition-delay:0.3s">
-        <div class="project-preview">
-          <iframe src="https://al-enaya-clinic.vercel.app" loading="lazy" title="Al Enaya Clinic" scrolling="no"></iframe>
-          <div class="project-overlay"></div>
-          <div class="project-type">موقع عيادة</div>
-        </div>
-        <div class="project-info">
-          <h3>Al Enaya Clinic</h3>
-          <p>موقع طبي احترافي لعيادة العناية يمنح المرضى تجربة مريحة للاطلاع على الخدمات وحجز المواعيد.</p>
-          <div class="project-tags">
-            <span class="tag">طبي</span>
-            <span class="tag">Vercel</span>
-            <span class="tag">تجربة مستخدم</span>
-          </div>
-          <a href="https://al-enaya-clinic.vercel.app" target="_blank" class="project-link">
-            زيارة الموقع <span class="arrow-icon">←</span>
-          </a>
-        </div>
-      </div>
-
+```
+  <!-- Project 1 -->
+  <div class="project-card fade-up">
+    <div class="project-preview">
+      <iframe src="https://www.beautifuloasistrading.com" loading="lazy" title="Beautiful Oasis Trading" scrolling="no"></iframe>
+      <div class="project-overlay"></div>
+      <div class="project-type">موقع شركة</div>
     </div>
+    <div class="project-info">
+      <h3>Beautiful Oasis Trading</h3>
+      <p>موقع متكامل لشركة تجارية احترافي يعرض المنتجات والخدمات بأسلوب أنيق يبني الثقة مع العملاء.</p>
+      <div class="project-tags">
+        <span class="tag">تصميم احترافي</span>
+        <span class="tag">متجاوب</span>
+        <span class="tag">شركات</span>
+      </div>
+      <a href="https://www.beautifuloasistrading.com" target="_blank" class="project-link">
+        زيارة الموقع <span class="arrow-icon">←</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Project 2 -->
+  <div class="project-card fade-up" style="transition-delay:0.1s">
+    <div class="project-preview">
+      <iframe src="https://hawk-gyms.vercel.app" loading="lazy" title="Hawk Gyms" scrolling="no"></iframe>
+      <div class="project-overlay"></div>
+      <div class="project-type">موقع رياضي</div>
+    </div>
+    <div class="project-info">
+      <h3>Hawk Gyms</h3>
+      <p>موقع لنادي رياضي بتصميم قوي وديناميكي يعكس روح اللياقة، مع عروض الاشتراكات وجداول التدريب.</p>
+      <div class="project-tags">
+        <span class="tag">تصميم ديناميكي</span>
+        <span class="tag">Vercel</span>
+        <span class="tag">رياضة</span>
+      </div>
+      <a href="https://hawk-gyms.vercel.app" target="_blank" class="project-link">
+        زيارة الموقع <span class="arrow-icon">←</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Project 3 -->
+  <div class="project-card fade-up" style="transition-delay:0.2s">
+    <div class="project-preview">
+      <iframe src="https://www.realstonemarble.com" loading="lazy" title="Real Stone Marble" scrolling="no"></iframe>
+      <div class="project-overlay"></div>
+      <div class="project-type">موقع تجاري</div>
+    </div>
+    <div class="project-info">
+      <h3>Real Stone Marble</h3>
+      <p>موقع فاخر لشركة رخام وأحجار طبيعية يبرز جمال المنتجات بصرياً ويجذب عملاء المقاولات والتصميم الداخلي.</p>
+      <div class="project-tags">
+        <span class="tag">تصميم فاخر</span>
+        <span class="tag">معرض منتجات</span>
+        <span class="tag">أعمال</span>
+      </div>
+      <a href="https://www.realstonemarble.com" target="_blank" class="project-link">
+        زيارة الموقع <span class="arrow-icon">←</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Project 4 -->
+  <div class="project-card fade-up" style="transition-delay:0.3s">
+    <div class="project-preview">
+      <iframe src="https://al-enaya-clinic.vercel.app" loading="lazy" title="Al Enaya Clinic" scrolling="no"></iframe>
+      <div class="project-overlay"></div>
+      <div class="project-type">موقع عيادة</div>
+    </div>
+    <div class="project-info">
+      <h3>Al Enaya Clinic</h3>
+      <p>موقع طبي احترافي لعيادة العناية يمنح المرضى تجربة مريحة للاطلاع على الخدمات وحجز المواعيد.</p>
+      <div class="project-tags">
+        <span class="tag">طبي</span>
+        <span class="tag">Vercel</span>
+        <span class="tag">تجربة مستخدم</span>
+      </div>
+      <a href="https://al-enaya-clinic.vercel.app" target="_blank" class="project-link">
+        زيارة الموقع <span class="arrow-icon">←</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+```
+
   </div>
 </section>
 
 <div class="gold-divider"></div>
 
 <!-- CONTACT -->
+
 <section id="contact">
   <div class="container">
     <div class="contact-inner">
@@ -838,16 +962,37 @@
       <div class="title-line" style="margin: 0 auto 0; background: linear-gradient(to right, var(--gold), transparent);"></div>
       <div class="contact-card fade-up">
         <p>هل لديك مشروع في ذهنك؟ سواء كان موقعاً جديداً أو تطوير موقع قائم أو متجراً إلكترونياً — أنا هنا لأساعدك من الفكرة حتى الإطلاق.</p>
-        <a href="tel:+9660566546244" class="contact-phone">
-          <span class="phone-icon">📞</span>
-          <span>0566546244</span>
-        </a>
+        <div class="contact-links">
+          <a href="tel:+971566546244" class="contact-phone">
+            <span class="phone-icon">📞</span>
+            <span dir="ltr">+971 566 546 244</span>
+          </a>
+          <a href="mailto:eyadx66@gmail.com" class="contact-email">
+            <span>✉️</span>
+            <span>eyadx66@gmail.com</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- WHATSAPP FLOAT -->
+
+<div class="whatsapp-float">
+  <div class="wa-popup" id="waPopup">
+    <button class="wa-close" onclick="document.getElementById('waPopup').classList.remove('open')">✕</button>
+    <p>👋 مرحباً! كيف أقدر أساعدك؟</p>
+    <a href="https://wa.me/971566546244?text=مرحباً إياد، أريد الاستفسار عن خدماتك" target="_blank">ابدأ المحادثة</a>
+  </div>
+  <button class="whatsapp-btn" onclick="document.getElementById('waPopup').classList.toggle('open')">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    واتساب
+  </button>
+</div>
+
 <!-- FOOTER -->
+
 <footer>
   <p>© 2025 <span>إياد عوض</span> — جميع الحقوق محفوظة</p>
 </footer>
@@ -863,6 +1008,27 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Handle iframes that refuse to load (X-Frame-Options / CSP blocks)
+document.querySelectorAll('.project-preview iframe').forEach(iframe => {
+  iframe.addEventListener('error', () => {
+    iframe.style.display = 'none';
+  });
+  // Some blocked iframes don't fire error; detect via load timeout
+  const timer = setTimeout(() => {
+    try {
+      // If we can't access contentDocument, it may be blocked
+      const doc = iframe.contentDocument;
+      if (!doc || !doc.body || doc.body.innerHTML === '') {
+        iframe.style.opacity = '0.3';
+      }
+    } catch(e) {
+      iframe.style.opacity = '0.3';
+    }
+  }, 4000);
+  iframe.addEventListener('load', () => clearTimeout(timer));
+});
 </script>
+
 </body>
 </html>
